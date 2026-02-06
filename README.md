@@ -1,8 +1,8 @@
-# ZonesTV Voice Support - AI Technical Assistant
+# BirdsEye Voice Support - AI Technical Assistant
 
-A world-class technical support application for ZonesTV customers, leveraging the **Gemini Live API** for real-time voice interactions and **Gemini 3 Flash** for intelligent chat support.
+A world-class technical support application for BirdsEye customers, leveraging the **Gemini Live API** for real-time voice interactions and **Gemini 3 Flash** for intelligent chat support.
 
-![ZonesTV Logo Concept](https://img.shields.io/badge/ZonesTV-Tech_Support-black?style=for-the-badge)
+![BirdsEye Logo Concept](https://img.shields.io/badge/BirdsEye-Tech_Support-black?style=for-the-badge)
 ![Built with Gemini](https://img.shields.io/badge/Built_with-Gemini_Live_API-blue?style=for-the-badge)
 
 ## 🚀 Key Features
@@ -18,7 +18,7 @@ A world-class technical support application for ZonesTV customers, leveraging th
 
 - **Frontend**: React 19 (ESM)
 - **Styling**: Tailwind CSS
-- **AI Models**: 
+- **AI Models**:
   - `gemini-2.5-flash-native-audio-preview-09-2025` (Voice)
   - `gemini-3-flash-preview` (Chat)
 - **Audio Processing**: Custom PCM encoding/decoding for raw audio streams.
@@ -44,10 +44,11 @@ A world-class technical support application for ZonesTV customers, leveraging th
 
 ## 📜 Support Guidelines
 
-The AI agent (Zones) is programmed with the following critical protocols:
+The AI agent (BirdsEye) is programmed with the following critical protocols:
+
 - **Renewal Price**: $35/month for existing customers.
 - **New Account**: $60 total ($25 activation + $35 first month).
 - **Payment Identification**: Customers must include "tech-support" in payment notes for automated tracking.
 
 ---
-*ZonesTV © 2025. All Rights Reserved.*
+*BirdsEye © 2025. All Rights Reserved.*

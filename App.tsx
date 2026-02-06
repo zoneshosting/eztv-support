@@ -1,13 +1,13 @@
 
 import React, { useState, useRef, useEffect, useCallback, useMemo } from 'react';
 import { GoogleGenAI, LiveServerMessage, Modality, FunctionDeclaration, Type } from '@google/genai';
-import { ZONES_TV_PROMPT, KNOWLEDGE_BASE_DATA } from './constants';
+import { BIRDSEYE_PROMPT, KNOWLEDGE_BASE_DATA } from './constants';
 import { decode, decodeAudioData, createBlob, downsampleBuffer } from './utils/audioUtils';
 
 // --- Configuration ---
 const TELEGRAM_CONFIG = {
-  BOT_TOKEN: '7722319021:AAGHUf_fi9v2J6Qtyp8enkq09q_IpS7hfyM', 
-  CHAT_ID: '-1002623596558' 
+  BOT_TOKEN: '7722319021:AAGHUf_fi9v2J6Qtyp8enkq09q_IpS7hfyM',
+  CHAT_ID: '-1002623596558'
 };
 
 // --- Types ---
@@ -97,7 +97,7 @@ const Button: React.FC<React.ButtonHTMLAttributes<HTMLButtonElement> & { variant
   };
 
   return (
-    <button 
+    <button
       className={`inline-flex items-center justify-center rounded-md px-3 py-2 sm:px-4 text-xs sm:text-sm font-bold uppercase tracking-tight transition-all focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-zinc-400 disabled:pointer-events-none disabled:opacity-50 ${variants[variant]} ${className}`}
       disabled={isLoading}
       {...props}
@@ -168,17 +168,17 @@ const Select = React.forwardRef<HTMLSelectElement, React.SelectHTMLAttributes<HT
 
 const AccordionItem: React.FC<{ title: string; content: string; isOpen: boolean; onClick: () => void }> = ({ title, content, isOpen, onClick }) => (
   <div className="border-b border-zinc-100 dark:border-zinc-800 last:border-0 overflow-hidden">
-    <button 
+    <button
       onClick={onClick}
       className="w-full flex items-center justify-between py-4 text-left group transition-all"
     >
       <span className={`text-sm font-bold uppercase tracking-tight transition-colors ${isOpen ? 'text-zinc-900 dark:text-zinc-100' : 'text-zinc-500 group-hover:text-zinc-800 dark:group-hover:text-zinc-300'}`}>
         {title}
       </span>
-      <svg 
-        className={`w-4 h-4 text-zinc-400 transition-transform duration-300 ${isOpen ? 'rotate-180 text-zinc-900 dark:text-zinc-100' : ''}`} 
-        fill="none" 
-        stroke="currentColor" 
+      <svg
+        className={`w-4 h-4 text-zinc-400 transition-transform duration-300 ${isOpen ? 'rotate-180 text-zinc-900 dark:text-zinc-100' : ''}`}
+        fill="none"
+        stroke="currentColor"
         viewBox="0 0 24 24"
       >
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M19 9l-7 7-7-7" />
@@ -194,11 +194,10 @@ const AccordionItem: React.FC<{ title: string; content: string; isOpen: boolean;
 
 const MessageBubble: React.FC<{ message: Message }> = ({ message }) => (
   <div className={`flex flex-col mb-4 sm:mb-6 ${message.role === 'user' ? 'items-end' : 'items-start'} animate-in fade-in slide-in-from-bottom-2 duration-300`}>
-    <div className={`max-w-[90%] sm:max-w-[75%] rounded-2xl px-3 py-2 sm:px-4 sm:py-2.5 text-xs sm:text-sm shadow-sm whitespace-pre-line ${
-      message.role === 'user' 
-        ? 'bg-zinc-900 text-zinc-50 dark:bg-zinc-50 dark:text-zinc-900' 
-        : 'bg-white text-zinc-900 border border-zinc-200/80 dark:bg-zinc-900 dark:text-zinc-100 dark:border-zinc-800'
-    }`}>
+    <div className={`max-w-[90%] sm:max-w-[75%] rounded-2xl px-3 py-2 sm:px-4 sm:py-2.5 text-xs sm:text-sm shadow-sm whitespace-pre-line ${message.role === 'user'
+      ? 'bg-zinc-900 text-zinc-50 dark:bg-zinc-50 dark:text-zinc-900'
+      : 'bg-white text-zinc-900 border border-zinc-200/80 dark:bg-zinc-900 dark:text-zinc-100 dark:border-zinc-800'
+      }`}>
       {message.text}
     </div>
     <span className="text-[10px] text-zinc-400 mt-1 uppercase font-bold tracking-tighter px-1">
@@ -212,7 +211,7 @@ export default function App() {
   const [messages, setMessages] = useState<Message[]>([
     {
       role: 'assistant',
-      text: "Welcome to ZonesTV Support! 👋\n\nTo ensure we pull up the correct account, please start by **spelling out your Username**.",
+      text: "Welcome to BirdsEye Support! 👋\n\nTo ensure we pull up the correct account, please start by **spelling out your Username**.",
       timestamp: new Date()
     }
   ]);
@@ -224,9 +223,9 @@ export default function App() {
   const [kbSearchQuery, setKbSearchQuery] = useState('');
   const [isReporting, setIsReporting] = useState(false);
   const [reportStatus, setReportStatus] = useState<{ type: 'success' | 'error', message: string } | null>(null);
-  
+
   const messagesEndRef = useRef<HTMLDivElement>(null);
-  
+
   // Voice State Refs
   const audioContextRef = useRef<AudioContext | null>(null);
   const outputAudioContextRef = useRef<AudioContext | null>(null);
@@ -252,8 +251,8 @@ export default function App() {
     const lowerQuery = kbSearchQuery.toLowerCase();
     return KNOWLEDGE_BASE_DATA.map(cat => ({
       ...cat,
-      articles: cat.articles.filter(art => 
-        art.title.toLowerCase().includes(lowerQuery) || 
+      articles: cat.articles.filter(art =>
+        art.title.toLowerCase().includes(lowerQuery) ||
         art.content.toLowerCase().includes(lowerQuery)
       )
     })).filter(cat => cat.articles.length > 0);
@@ -273,13 +272,13 @@ export default function App() {
     const attachment = formData.get('attachment') as File;
 
     try {
-      await sendTelegramAlert({ 
-        category, 
-        username, 
-        subject, 
-        device, 
-        description, 
-        image: attachment && attachment.size > 0 ? attachment : null 
+      await sendTelegramAlert({
+        category,
+        username,
+        subject,
+        device,
+        description,
+        image: attachment && attachment.size > 0 ? attachment : null
       });
       setReportStatus({ type: 'success', message: 'Report submitted successfully! Technicians have been alerted via Telegram.' });
       (e.target as HTMLFormElement).reset();
@@ -293,9 +292,9 @@ export default function App() {
 
   const sendMessage = async (text: string) => {
     if (!text.trim()) return;
-    
+
     const userMsg: Message = { role: 'user', text, timestamp: new Date() };
-    
+
     const history = messages.map(msg => ({
       role: msg.role === 'user' ? 'user' : 'model',
       parts: [{ text: msg.text }]
@@ -311,7 +310,7 @@ export default function App() {
         model: 'gemini-3-flash-preview',
         contents: [...history, { role: 'user', parts: [{ text }] }],
         config: {
-          systemInstruction: ZONES_TV_PROMPT
+          systemInstruction: BIRDSEYE_PROMPT
         }
       });
 
@@ -332,19 +331,19 @@ export default function App() {
   const startVoice = useCallback(async () => {
     try {
       const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
-      const stream = await navigator.mediaDevices.getUserMedia({ 
+      const stream = await navigator.mediaDevices.getUserMedia({
         audio: {
           echoCancellation: true,
           noiseSuppression: true,
           autoGainControl: true,
           channelCount: 1,
           sampleRate: 16000
-        } 
+        }
       });
-      
+
       const inputCtx = new (window.AudioContext || (window as any).webkitAudioContext)();
       const outputCtx = new (window.AudioContext || (window as any).webkitAudioContext)({ sampleRate: 24000 });
-      
+
       // Crucial: resume audio context to ensure playback is not blocked by browser policy
       await inputCtx.resume();
       await outputCtx.resume();
@@ -358,11 +357,11 @@ export default function App() {
           onopen: () => {
             const source = inputCtx.createMediaStreamSource(stream);
             const scriptProcessor = inputCtx.createScriptProcessor(4096, 1, 1);
-            
+
             scriptProcessor.onaudioprocess = (e) => {
               if (isMicMutedRef.current) return;
               const inputData = e.inputBuffer.getChannelData(0);
-              
+
               const currentRate = inputCtx.sampleRate;
               let pcmData = inputData;
               if (currentRate !== 16000) pcmData = downsampleBuffer(inputData, currentRate, 16000);
@@ -370,7 +369,7 @@ export default function App() {
               const pcmBlob = createBlob(pcmData);
               sessionPromise.then(session => session.sendRealtimeInput({ media: pcmBlob }));
             };
-            
+
             source.connect(scriptProcessor);
             scriptProcessor.connect(inputCtx.destination);
             setIsVoiceActive(true);
@@ -400,7 +399,7 @@ export default function App() {
                   } catch (e) {
                     console.error("Tool execution failed", e);
                   }
-                  
+
                   sessionPromise.then(session => session.sendToolResponse({
                     functionResponses: {
                       id: fc.id,
@@ -438,7 +437,7 @@ export default function App() {
               if (base64Audio) {
                 // Ensure context is running
                 if (outputCtx.state === 'suspended') await outputCtx.resume();
-                
+
                 nextStartTimeRef.current = Math.max(nextStartTimeRef.current, outputCtx.currentTime);
                 const buffer = await decodeAudioData(decode(base64Audio), outputCtx, 24000, 1);
                 const source = outputCtx.createBufferSource();
@@ -453,7 +452,7 @@ export default function App() {
 
             if (serverContent?.interrupted) {
               sourcesRef.current.forEach(s => {
-                try { s.stop(); } catch(e) {}
+                try { s.stop(); } catch (e) { }
               });
               sourcesRef.current.clear();
               nextStartTimeRef.current = 0;
@@ -470,7 +469,7 @@ export default function App() {
         config: {
           responseModalities: [Modality.AUDIO],
           speechConfig: { voiceConfig: { prebuiltVoiceConfig: { voiceName: 'Zephyr' } } },
-          systemInstruction: ZONES_TV_PROMPT,
+          systemInstruction: BIRDSEYE_PROMPT,
           tools: [{ functionDeclarations: [reportIssueTool] }],
           inputAudioTranscription: {},
           outputAudioTranscription: {}
@@ -486,18 +485,18 @@ export default function App() {
   const stopVoice = useCallback(() => {
     setIsVoiceActive(false);
     setIsMicMuted(false);
-    
+
     // Properly close the Live API session
     if (sessionPromiseRef.current) {
       sessionPromiseRef.current.then(session => {
-        try { session.close(); } catch(e) {}
+        try { session.close(); } catch (e) { }
       });
       sessionPromiseRef.current = null;
     }
 
     // Stop all active sources and close contexts
     sourcesRef.current.forEach(s => {
-      try { s.stop(); } catch(e) {}
+      try { s.stop(); } catch (e) { }
     });
     sourcesRef.current.clear();
     nextStartTimeRef.current = 0;
@@ -511,7 +510,7 @@ export default function App() {
       <header className="px-6 py-4 border-b border-zinc-100 dark:border-zinc-900 bg-white/80 dark:bg-black/80 backdrop-blur-md sticky top-0 z-30 flex items-center justify-between relative min-h-[80px]">
         <div className="flex flex-col z-10">
           <h1 className="text-xl font-black tracking-tighter uppercase leading-none italic">
-            Zones<span className="text-zinc-400">TV</span>
+            BirdsEye<span className="text-zinc-400">Support</span>
           </h1>
           <p className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest mt-1 flex items-center gap-1.5">
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
@@ -519,7 +518,7 @@ export default function App() {
           </p>
         </div>
         <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none">
-          <img src="https://i.postimg.cc/s2HDnDfQ/logo.png" alt="ZonesTV Logo" className="h-10 sm:h-12 w-auto object-contain" />
+          <img src="https://i.postimg.cc/s2HDnDfQ/logo.png" alt="BirdsEye Logo" className="h-10 sm:h-12 w-auto object-contain" />
         </div>
         <div className="flex items-center gap-2 z-10">
           <Button variant="ghost" className="p-2" onClick={() => window.location.reload()}>
@@ -538,42 +537,41 @@ export default function App() {
         {mode === 'chat' && (
           <div className="flex flex-col h-full">
             <div className="flex-1 p-6 overflow-y-auto space-y-4">
-               <div className="flex flex-col justify-center items-center text-center space-y-6 mb-8 mt-4">
-                  <div className={`relative transition-all duration-700 ${isVoiceActive ? 'scale-110' : 'scale-100'}`}>
-                    <div className={`absolute inset-0 bg-zinc-900 dark:bg-zinc-50 rounded-full blur-3xl opacity-20 animate-pulse ${isVoiceActive ? 'scale-150' : 'scale-0'}`}></div>
-                    <div className={`w-24 h-24 sm:w-32 sm:h-32 rounded-full border-2 flex items-center justify-center relative z-10 transition-colors duration-500 ${
-                      isVoiceActive 
-                        ? (isMicMuted ? 'border-amber-500 bg-amber-500/10' : 'border-zinc-900 dark:border-zinc-50 bg-zinc-900 dark:bg-zinc-50')
-                        : 'border-zinc-200 dark:border-zinc-800'
+              <div className="flex flex-col justify-center items-center text-center space-y-6 mb-8 mt-4">
+                <div className={`relative transition-all duration-700 ${isVoiceActive ? 'scale-110' : 'scale-100'}`}>
+                  <div className={`absolute inset-0 bg-zinc-900 dark:bg-zinc-50 rounded-full blur-3xl opacity-20 animate-pulse ${isVoiceActive ? 'scale-150' : 'scale-0'}`}></div>
+                  <div className={`w-24 h-24 sm:w-32 sm:h-32 rounded-full border-2 flex items-center justify-center relative z-10 transition-colors duration-500 ${isVoiceActive
+                    ? (isMicMuted ? 'border-amber-500 bg-amber-500/10' : 'border-zinc-900 dark:border-zinc-50 bg-zinc-900 dark:bg-zinc-50')
+                    : 'border-zinc-200 dark:border-zinc-800'
                     }`}>
-                      {isVoiceActive ? (
-                        isMicMuted ? (
-                          <svg className="w-10 h-10 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3l18 18" /></svg>
-                        ) : (
-                          <div className="flex items-end gap-1.5 h-8">
-                            {[1,2,3,4,5].map(i => (
-                              <div key={i} className="w-1 bg-white dark:bg-zinc-950 rounded-full animate-bounce" style={{ height: `${20 + Math.random() * 80}%`, animationDelay: `${i * 0.1}s` }}></div>
-                            ))}
-                          </div>
-                        )
+                    {isVoiceActive ? (
+                      isMicMuted ? (
+                        <svg className="w-10 h-10 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3l18 18" /></svg>
                       ) : (
-                        <svg className="w-10 h-10 text-zinc-300 dark:text-zinc-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" /></svg>
-                      )}
-                    </div>
-                  </div>
-                  <div className="flex flex-col gap-3 w-full max-w-xs">
-                    {isVoiceActive && (
-                      <Button onClick={() => setIsMicMuted(!isMicMuted)} variant={isMicMuted ? "warning" : "secondary"} className="w-full h-10 text-sm rounded-full flex items-center justify-center gap-2">
-                         {isMicMuted ? "Unmute Mic" : "Mute Mic"}
-                      </Button>
+                        <div className="flex items-end gap-1.5 h-8">
+                          {[1, 2, 3, 4, 5].map(i => (
+                            <div key={i} className="w-1 bg-white dark:bg-zinc-950 rounded-full animate-bounce" style={{ height: `${20 + Math.random() * 80}%`, animationDelay: `${i * 0.1}s` }}></div>
+                          ))}
+                        </div>
+                      )
+                    ) : (
+                      <svg className="w-10 h-10 text-zinc-300 dark:text-zinc-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" /></svg>
                     )}
-                    <Button onClick={isVoiceActive ? stopVoice : startVoice} variant={isVoiceActive ? "destructive" : "primary"} className="w-full h-10 text-sm rounded-full">
-                      {isVoiceActive ? "End Voice Session" : "Start Voice Support"}
-                    </Button>
                   </div>
                 </div>
-                {messages.map((msg, idx) => <MessageBubble key={idx} message={msg} />)}
-                <div ref={messagesEndRef} />
+                <div className="flex flex-col gap-3 w-full max-w-xs">
+                  {isVoiceActive && (
+                    <Button onClick={() => setIsMicMuted(!isMicMuted)} variant={isMicMuted ? "warning" : "secondary"} className="w-full h-10 text-sm rounded-full flex items-center justify-center gap-2">
+                      {isMicMuted ? "Unmute Mic" : "Mute Mic"}
+                    </Button>
+                  )}
+                  <Button onClick={isVoiceActive ? stopVoice : startVoice} variant={isVoiceActive ? "destructive" : "primary"} className="w-full h-10 text-sm rounded-full">
+                    {isVoiceActive ? "End Voice Session" : "Start Voice Support"}
+                  </Button>
+                </div>
+              </div>
+              {messages.map((msg, idx) => <MessageBubble key={idx} message={msg} />)}
+              <div ref={messagesEndRef} />
             </div>
             <div className="p-4 border-t border-zinc-100 dark:border-zinc-900 bg-white/80 dark:bg-black/80 backdrop-blur-sm">
               <form onSubmit={(e) => { e.preventDefault(); sendMessage(inputText); }} className="flex gap-2">
@@ -622,29 +620,29 @@ export default function App() {
                   </Select>
                 </div>
                 <div className="space-y-1">
-                   <label className="text-[10px] font-black uppercase tracking-widest text-zinc-400 px-1">Account Username</label>
-                   <Input name="username" placeholder="Username" required />
+                  <label className="text-[10px] font-black uppercase tracking-widest text-zinc-400 px-1">Account Username</label>
+                  <Input name="username" placeholder="Username" required />
                 </div>
                 <div className="space-y-1">
-                   <label className="text-[10px] font-black uppercase tracking-widest text-zinc-400 px-1">Issue Subject</label>
-                   <Input name="subject" placeholder="Issue Subject" required />
+                  <label className="text-[10px] font-black uppercase tracking-widest text-zinc-400 px-1">Issue Subject</label>
+                  <Input name="subject" placeholder="Issue Subject" required />
                 </div>
                 <div className="space-y-1">
-                   <label className="text-[10px] font-black uppercase tracking-widest text-zinc-400 px-1">Device Model</label>
-                   <Input name="device" placeholder="Device Model (e.g. Firestick)" required />
+                  <label className="text-[10px] font-black uppercase tracking-widest text-zinc-400 px-1">Device Model</label>
+                  <Input name="device" placeholder="Device Model (e.g. Firestick)" required />
                 </div>
                 <div className="space-y-1">
-                   <label className="text-[10px] font-black uppercase tracking-widest text-zinc-400 px-1">Detailed Description</label>
-                   <TextArea name="description" placeholder="Description of the problem..." required />
+                  <label className="text-[10px] font-black uppercase tracking-widest text-zinc-400 px-1">Detailed Description</label>
+                  <TextArea name="description" placeholder="Description of the problem..." required />
                 </div>
                 <div className="space-y-1">
-                   <label className="text-[10px] font-black uppercase tracking-widest text-zinc-400 px-1">Attach Image (Screenshot / Proof of Payment)</label>
-                   <Input 
-                      type="file" 
-                      name="attachment" 
-                      accept="image/png, image/jpeg" 
-                      className="cursor-pointer file:cursor-pointer file:font-bold file:uppercase file:text-[10px]"
-                   />
+                  <label className="text-[10px] font-black uppercase tracking-widest text-zinc-400 px-1">Attach Image (Screenshot / Proof of Payment)</label>
+                  <Input
+                    type="file"
+                    name="attachment"
+                    accept="image/png, image/jpeg"
+                    className="cursor-pointer file:cursor-pointer file:font-bold file:uppercase file:text-[10px]"
+                  />
                 </div>
                 <Button type="submit" variant="destructive" className="w-full h-12" isLoading={isReporting}>Dispatch Technicians</Button>
               </form>
@@ -654,11 +652,11 @@ export default function App() {
       </main>
 
       <footer className="p-6 border-t border-zinc-100 dark:border-zinc-900 bg-zinc-50/50 dark:bg-zinc-900/50 flex flex-col items-center gap-2">
-        <p className="text-[10px] font-black uppercase tracking-widest text-zinc-400">Powered by ZonesPlus Live</p>
+        <p className="text-[10px] font-black uppercase tracking-widest text-zinc-400">Powered by BirdsEye Live</p>
         <div className="flex gap-4">
-          <a href="mailto:support@zonestv.com" className="text-[10px] font-bold uppercase">Email Support</a>
+          <a href="mailto:support@birdseye.com" className="text-[10px] font-bold uppercase">Email Support</a>
           <span className="text-zinc-300">|</span>
-          <a href="https://zonestv.com" className="text-[10px] font-bold uppercase">Main Site</a>
+          <a href="https://birdseye.com" className="text-[10px] font-bold uppercase">Main Site</a>
         </div>
       </footer>
     </div>
