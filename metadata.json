@@ -1,0 +1,7 @@
+{
+  "name": "ZonesTV Voice Support - Zones",
+  "description": "An AI-powered voice assistant providing technical support for ZonesTV customers using the Gemini Live API.",
+  "requestFramePermissions": [
+    "microphone"
+  ]
+}
