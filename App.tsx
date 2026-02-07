@@ -518,7 +518,7 @@ export default function App() {
           </p>
         </div>
         <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none">
-          <img src="https://i.postimg.cc/s2HDnDfQ/logo.png" alt="BirdsEye Logo" className="h-10 sm:h-12 w-auto object-contain" />
+          <img src="/logo.png" alt="BirdsEye Logo" className="h-10 sm:h-12 w-auto object-contain" />
         </div>
         <div className="flex items-center gap-2 z-10">
           <Button variant="ghost" className="p-2" onClick={() => window.location.reload()}>
