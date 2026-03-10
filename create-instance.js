@@ -148,7 +148,7 @@ async function run() {
                         execSync('netlify --version', { stdio: 'ignore' });
 
                         console.log(`Creating Netlify site: ${currentRepoName}...`);
-                        execSync(`netlify sites:create --name ${currentRepoName} --account zoneshosting`, { stdio: 'inherit' });
+                        execSync(`netlify sites:create --name ${currentRepoName} --account-slug zoneshosting`, { stdio: 'inherit' });
 
                         console.log('Linking repository for Continuous Deployment...');
                         execSync(`netlify link --name ${currentRepoName}`, { stdio: 'inherit' });
