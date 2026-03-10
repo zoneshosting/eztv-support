@@ -1,14 +1,8 @@
 
 import React, { useState, useRef, useEffect, useCallback, useMemo } from 'react';
 import { GoogleGenAI, LiveServerMessage, Modality, FunctionDeclaration, Type } from '@google/genai';
-import { BIRDSEYE_PROMPT, KNOWLEDGE_BASE_DATA } from './constants';
+import { SYSTEM_PROMPT, KNOWLEDGE_BASE_DATA, COMPANY_CONFIG, TELEGRAM_CONFIG } from './constants';
 import { decode, decodeAudioData, createBlob, downsampleBuffer } from './utils/audioUtils';
-
-// --- Configuration ---
-const TELEGRAM_CONFIG = {
-  BOT_TOKEN: '7722319021:AAGHUf_fi9v2J6Qtyp8enkq09q_IpS7hfyM',
-  CHAT_ID: '-1002623596558'
-};
 
 // --- Types ---
 
@@ -25,12 +19,12 @@ type SupportMode = 'chat' | 'kb' | 'report';
 async function sendTelegramAlert(data: { category: string, username: string, subject: string, device: string, description: string, image?: File | null }) {
   const messageText = `🚨 NEW TICKET [${data.category.toUpperCase()}]\n\nUser: ${data.username}\nSubject: ${data.subject}\nDevice: ${data.device}\nDescription: ${data.description}\n\nTime: ${new Date().toLocaleString()}`;
 
-  let url = `https://api.telegram.org/bot${TELEGRAM_CONFIG.BOT_TOKEN}/sendMessage`;
+  let url = `https://api.telegram.org/bot${TELEGRAM_CONFIG.botToken}/sendMessage`;
   const formData = new FormData();
-  formData.append('chat_id', TELEGRAM_CONFIG.CHAT_ID);
+  formData.append('chat_id', TELEGRAM_CONFIG.chatId);
 
   if (data.image) {
-    url = `https://api.telegram.org/bot${TELEGRAM_CONFIG.BOT_TOKEN}/sendPhoto`;
+    url = `https://api.telegram.org/bot${TELEGRAM_CONFIG.botToken}/sendPhoto`;
     formData.append('photo', data.image);
     formData.append('caption', messageText);
   } else {
@@ -211,7 +205,7 @@ export default function App() {
   const [messages, setMessages] = useState<Message[]>([
     {
       role: 'assistant',
-      text: "Welcome to BirdsEye Support! 👋\n\nTo ensure we pull up the correct account, please start by **spelling out your Username**.",
+      text: `Welcome to ${COMPANY_CONFIG.name} Support! 👋\n\nTo ensure we pull up the correct account, please start by **spelling out your Username**.`,
       timestamp: new Date()
     }
   ]);
@@ -284,7 +278,7 @@ export default function App() {
       (e.target as HTMLFormElement).reset();
     } catch (error) {
       console.error("Network/Reporting Error:", error);
-      setReportStatus({ type: 'error', message: 'Failed to alert technicians. Please try again or text 813-575-0908.' });
+      setReportStatus({ type: 'error', message: `Failed to alert technicians. Please try again or text ${COMPANY_CONFIG.supportNumber}.` });
     } finally {
       setIsReporting(false);
     }
@@ -310,7 +304,7 @@ export default function App() {
         model: 'gemini-3-flash-preview',
         contents: [...history, { role: 'user', parts: [{ text }] }],
         config: {
-          systemInstruction: BIRDSEYE_PROMPT
+          systemInstruction: SYSTEM_PROMPT
         }
       });
 
@@ -469,7 +463,7 @@ export default function App() {
         config: {
           responseModalities: [Modality.AUDIO],
           speechConfig: { voiceConfig: { prebuiltVoiceConfig: { voiceName: 'Zephyr' } } },
-          systemInstruction: BIRDSEYE_PROMPT,
+          systemInstruction: SYSTEM_PROMPT,
           tools: [{ functionDeclarations: [reportIssueTool] }],
           inputAudioTranscription: {},
           outputAudioTranscription: {}
@@ -510,7 +504,7 @@ export default function App() {
       <header className="px-6 py-4 border-b border-zinc-100 dark:border-zinc-900 bg-white/80 dark:bg-black/80 backdrop-blur-md sticky top-0 z-30 flex items-center justify-between relative min-h-[80px]">
         <div className="flex flex-col z-10">
           <h1 className="text-xl font-black tracking-tighter uppercase leading-none italic">
-            BirdsEye<span className="text-zinc-400">Support</span>
+            {COMPANY_CONFIG.name}<span className="text-zinc-400">Support</span>
           </h1>
           <p className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest mt-1 flex items-center gap-1.5">
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
@@ -518,7 +512,7 @@ export default function App() {
           </p>
         </div>
         <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none">
-          <img src="/logo.png" alt="BirdsEye Logo" className="h-10 sm:h-12 w-auto object-contain" />
+          <img src={COMPANY_CONFIG.logoUrl} alt={`${COMPANY_CONFIG.name} Logo`} className="h-10 sm:h-12 w-auto object-contain" />
         </div>
         <div className="flex items-center gap-2 z-10">
           <Button variant="ghost" className="p-2" onClick={() => window.location.reload()}>
@@ -608,7 +602,7 @@ export default function App() {
               <Button variant="ghost" onClick={() => setMode('chat')}>Close Form</Button>
             </div>
             <h2 className="text-2xl font-black uppercase tracking-tighter">Report an Outage</h2>
-            <p className="text-xs text-zinc-500 font-bold uppercase tracking-tight">Support Line: 813-575-0908 (TEXT ONLY - NO CALLS)</p>
+            <p className="text-xs text-zinc-500 font-bold uppercase tracking-tight">Support Line: {COMPANY_CONFIG.supportNumber} (TEXT ONLY - NO CALLS)</p>
             {reportStatus && <div className="p-4 rounded-lg text-sm font-bold border">{reportStatus.message}</div>}
             <Card className="p-6">
               <form onSubmit={handleReportSubmit} className="space-y-5">
@@ -652,11 +646,11 @@ export default function App() {
       </main>
 
       <footer className="p-6 border-t border-zinc-100 dark:border-zinc-900 bg-zinc-50/50 dark:bg-zinc-900/50 flex flex-col items-center gap-2">
-        <p className="text-[10px] font-black uppercase tracking-widest text-zinc-400">Powered by BirdsEye Live</p>
+        <p className="text-[10px] font-black uppercase tracking-widest text-zinc-400">Powered by {COMPANY_CONFIG.name} Live</p>
         <div className="flex gap-4">
-          <a href="mailto:support@birdseye.com" className="text-[10px] font-bold uppercase">Email Support</a>
+          <a href={`mailto:${COMPANY_CONFIG.supportEmail}`} className="text-[10px] font-bold uppercase">Email Support</a>
           <span className="text-zinc-300">|</span>
-          <a href="https://birdseye.com" className="text-[10px] font-bold uppercase">Main Site</a>
+          <a href="/" className="text-[10px] font-bold uppercase">Main Site</a>
         </div>
       </footer>
     </div>

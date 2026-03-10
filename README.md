@@ -1,11 +1,45 @@
-# BirdsEye Voice Support - AI Technical Assistant
+# EZTV-Support Voice Support - AI Technical Assistant
 
-A world-class technical support application for BirdsEye customers, leveraging the **Gemini Live API** for real-time voice interactions and **Gemini 3 Flash** for intelligent chat support.
+A world-class technical support application template, leveraging the **Gemini Live API** for real-time voice interactions and **Gemini 3 Flash** for intelligent chat support. This project is designed to be a template for multiple support instances (e.g., EZTV-Support, CableBusters).
 
-![BirdsEye Logo Concept](https://img.shields.io/badge/BirdsEye-Tech_Support-black?style=for-the-badge)
-![Built with Gemini](https://img.shields.io/badge/Built_with-Gemini_Live_API-blue?style=for-the-badge)
+## 🏢 Multi-Instance Templating
+
+This project supports multiple company instances from a single codebase.
+
+### 1. Adding a New Instance
+
+1. Create a new JSON file in the `configs/` directory (e.g., `cablebusters.json`).
+2. Define the company info, theme, system prompt, and knowledge base.
+
+### 2. Local Development
+
+To run a specific instance locally:
+
+```bash
+# Run EZTV-Support (Default)
+npm run dev
+
+# Run CableBusters
+$env:INSTANCE_CONFIG="cablebusters"; npm run dev
+```
+
+### 3. Deployment (GitHub Actions)
+
+The project includes a GitHub Action `Deploy Instance` that allows you to:
+
+1. Select the `company_id` from a dropdown.
+2. Automatically build with the correct config.
+3. Deploy to the corresponding Netlify site.
+
+**Prerequisites for Deployment:**
+
+- Add `API_KEY` to GitHub Secrets.
+- Add `NETLIFY_AUTH_TOKEN` to GitHub Secrets.
+- Add `NETLIFY_SITE_ID_[company_id]` for each instance (e.g., `NETLIFY_SITE_ID_BIRDSEYE`).
 
 ## 🚀 Key Features
+
+... (rest of the features)
 
 - **Live Voice Agent**: Low-latency, human-like voice interaction using the `gemini-2.5-flash-native-audio` model.
 - **Interactive Knowledge Base**: A high-contrast, searchable FAQ system with accordion-style documentation for instant self-service.
@@ -44,11 +78,11 @@ A world-class technical support application for BirdsEye customers, leveraging t
 
 ## 📜 Support Guidelines
 
-The AI agent (BirdsEye) is programmed with the following critical protocols:
+The AI agent (EZTV-Support) is programmed with the following critical protocols:
 
 - **Renewal Price**: $35/month for existing customers.
 - **New Account**: $60 total ($25 activation + $35 first month).
 - **Payment Identification**: Customers must include "tech-support" in payment notes for automated tracking.
 
 ---
-*BirdsEye © 2025. All Rights Reserved.*
+*EZTV-Support © 2025. All Rights Reserved.*

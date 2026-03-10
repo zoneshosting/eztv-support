@@ -1,0 +1,20 @@
+{
+    "company": {
+        "name": "NE Support",
+        "supportNumber": "555-011-8888",
+        "supportEmail": "help@nesupport.com",
+        "logoUrl": "/ne-logo.png",
+        "theme": {
+            "primaryColor": "red-900",
+            "accentColor": "blue-500"
+        }
+    },
+    "telegram": {
+        "botToken": "YOUR_BOT_TOKEN",
+        "chatId": "YOUR_CHAT_ID"
+    },
+    "prompt": {
+        "identity": "# NE Support Tech Support Voice Agent Prompt\n\n## Identity & Purpose\nYou are NE Support, a knowledgeable and friendly tech support voice assistant for North East services...",
+        "knowledgeBase": []
+    }
+}
