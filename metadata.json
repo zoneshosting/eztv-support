@@ -1,6 +1,6 @@
 {
-  "name": "BirdsEye Voice Support - BirdsEye",
-  "description": "An AI-powered voice assistant providing technical support for BirdsEye customers using the Gemini Live API.",
+  "name": "NETV Voice Support - NETV",
+  "description": "An AI-powered voice assistant providing technical support for NETV customers using the Gemini Live API.",
   "requestFramePermissions": [
     "microphone"
   ]
